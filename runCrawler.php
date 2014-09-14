@@ -3,9 +3,16 @@
 
 #echo system('/bin/ruby /var/www/html/tryTwo/webCrawler.rb');
 
+$search = $_POST["search"];
+$depth = $_POST['depth'];
+$results = $_POST['results'];
+
+
 $t='<p><b>Hello</b><i>world!</i></p>';
 $scaped=preg_quote($t,"/");
-$program='ruby webCrawler.rb';
+$program='ruby webCrawler.rb -s '.$search.' -d '.$depth.' -r '.$results.'';
+#$program='ruby webCrawler.rb -s Light -d 10 -r 10';
+
 
 //exec($program.' '.$scaped,$n); print_r($n); exit; //Works!!!
 
@@ -26,7 +33,7 @@ if(is_resource($process)){
     $return_value=proc_close($process);
 	parse_str($r,$array);
 
-	var_dump($array);
+	print_r(http_build_query($array));
 }
 
 

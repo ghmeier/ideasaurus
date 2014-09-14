@@ -1,5 +1,5 @@
 require 'spidr'
-require "optparse"  
+require 'optparse'  
 
 options = {:search => "Dinosaur", :depth => 0, :results => 5}
 
@@ -26,7 +26,8 @@ $ignoreUrls = ["http://en.wikipedia.org/wiki/Digital_object_identifier",
 			"http://en.wikipedia.org/wiki/PubMed_Identifier",
 			"http://en.wikipedia.org/wiki/International_Standard_Book_Number",
 			"http://en.wikipedia.org/wiki/Main_Page",
-			"http://en.wikipedia.org/wiki/PubMed_Central"
+			"http://en.wikipedia.org/wiki/PubMed_Central",
+			"http://en.wikipedia.org/wiki/Wikisource"
 			]
 			
 terms = "#{options[:search]}"

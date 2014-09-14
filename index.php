@@ -1,4 +1,4 @@
-<?php include "runCrawler.php"; ?>
+
 <!DOCTYPE HTML>
 
 <html>
@@ -50,12 +50,12 @@ body {
 
 <body>
 	
-<form class="inputForm" onsubmit="getIdea()" action="" role="form">
+<form class="inputForm" onsubmit="" action="" role="form">
 	<img src="./img/ideasaurusLogo.png"/>
 	<div class="input-group">
 		<span class="input-group-btn">
 			<input type="text" id="search" class="form-control">
-			<button class="btn btn-default"  type="submit" value="Submit">Ideasaur!</button>
+			<button id="submitButton" class="btn btn-default" type="submit" value="Submit">Ideasaur!</button>
 		</span>
 	</div>
 	
@@ -89,6 +89,9 @@ body {
 		</div>
 	</div>
 </form>
+<div class="nodes">
+
+</div>
 
 <script>
    $( document.body ).on( 'click', '.dropdown-menu li', function( event ) {
@@ -104,10 +107,33 @@ body {
 
    });
 
-	function getIdea(){
-		var w = $.get("runCrawler.php", function(data){ alert(data) });
-		//alert("submitted " + $("input").val() + " "+ $("#depthLabel").text() + " "+ $("#breadthLabel").text());
-	}
+	$("#submitButton").click( function(e){
+	e.preventDefault();
+		$.ajax({
+            type: 'POST',   
+            data: 'search=light&results=10&depth=10',
+			url: 'runCrawler.php',
+            success: function(data){
+                // If you want, alert whatever your PHP script outputs
+                var array = getQueryVariable(data);
+				$(".nodes").text(array[1]);
+            },
+            error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                alert("Status: " + textStatus+" Error: " + errorThrown); 
+            }    
+        });
+	});
+	
+	function getQueryVariable(query) {
+    var vars = query.split('&');
+	var hash = [];
+    for (var i = 0; i < vars.length; i++) {
+        var pair = vars[i].split('=');
+		hash.push(decodeURIComponent(pair[0]));
+    }
+	
+	return hash;
+}
 </script>
 
 </body>
