@@ -12,7 +12,7 @@
 class DataCollector : public myo::DeviceListener
 {
 public:
-	DataCollector() : onArm(false), roll_w(0), pitch_w(0), yaw_w(0), currentPose() { }
+	DataCollector() : onArm(false), roll_w(0), pitch_w(0), yaw_w(0), currentPose(), running(false) { }
 
 	void onUnpair(myo::Myo *myo, uint64_t timestamp)
 	{
@@ -39,13 +39,45 @@ public:
         roll_w = static_cast<int>((roll + (float)M_PI)/(M_PI * 2.0f) * 18);
         pitch_w = static_cast<int>((pitch + (float)M_PI/2.0f)/M_PI * 18);
         yaw_w = static_cast<int>((yaw + (float)M_PI)/(M_PI * 2.0f) * 18);
+
+		POINT cursor;
+		GetCursorPos(&cursor);
+
+#define MOVE_AMOUNT 2
+
+		if(pitch_w > 9)
+		{
+			cursor.y += -MOVE_AMOUNT;
+		}
+		else if(pitch_w < 8)
+		{
+			cursor.y += MOVE_AMOUNT;
+		}
+
+		if(roll_w > 9)
+		{
+			cursor.x += -MOVE_AMOUNT;
+		}
+		else if(roll_w < 9)
+		{
+			cursor.x += MOVE_AMOUNT;
+		}
+
+		if(running)
+		{
+			SetCursorPos(cursor.x, cursor.y);
+		}
 	}
 
 	void onPose(myo::Myo *myo, uint64_t timestamp, myo::Pose pose)
 	{
 		currentPose = pose;
 
-		if(pose == myo::Pose::waveIn)
+		if(pose == myo::Pose::fist)
+		{
+			running = !running;
+		}
+		else if(pose == myo::Pose::waveIn)
 		{
 			myo->vibrate(myo::Myo::vibrationShort);
 			INPUT input = { 0 };
@@ -83,34 +115,14 @@ public:
 		onArm = false;
 	}
 
-	void print()
-    {
-        // Clear the current line
-        std::cout << '\r';
-        // Print out the orientation. Orientation data is always available, even if no arm is currently recognized.
-        std::cout << '[' << std::string(roll_w, '*') << std::string(18 - roll_w, ' ') << ']'
-                  << '[' << std::string(pitch_w, '*') << std::string(18 - pitch_w, ' ') << ']'
-                  << '[' << std::string(yaw_w, '*') << std::string(18 - yaw_w, ' ') << ']';
-        if (onArm) {
-            // Print out the currently recognized pose and which arm Myo is being worn on.
-            // Pose::toString() provides the human-readable name of a pose. We can also output a Pose directly to an
-            // output stream (e.g. std::cout << currentPose;). In this case we want to get the pose name's length so
-            // that we can fill the rest of the field with spaces below, so we obtain it as a string using toString().
-            std::string poseString = currentPose.toString();
-            std::cout << '[' << (whichArm == myo::armLeft ? "L" : "R") << ']'
-                      << '[' << poseString << std::string(14 - poseString.size(), ' ') << ']';
-        } else {
-            // Print out a placeholder for the arm and pose when Myo doesn't currently know which arm it's on.
-            std::cout << "[?]" << '[' << std::string(14, ' ') << ']';
-        }
-        std::cout << std::flush;
-    }
     // These values are set by onArmRecognized() and onArmLost() above.
     bool onArm;
     myo::Arm whichArm;
     // These values are set by onOrientationData() and onPose() above.
     int roll_w, pitch_w, yaw_w;
     myo::Pose currentPose;
+
+	bool running;
 };
 
 int main(int argc, char **argv)
@@ -138,7 +150,6 @@ int main(int argc, char **argv)
 		while(true)
 		{
 			hub.run(1000/20);
-			collector.print();
 		}
 	}
 	catch(const std::exception &e)
