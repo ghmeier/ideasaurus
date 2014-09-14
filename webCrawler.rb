@@ -27,7 +27,8 @@ $ignoreUrls = ["http://en.wikipedia.org/wiki/Digital_object_identifier",
 			"http://en.wikipedia.org/wiki/International_Standard_Book_Number",
 			"http://en.wikipedia.org/wiki/Main_Page",
 			"http://en.wikipedia.org/wiki/PubMed_Central",
-			"http://en.wikipedia.org/wiki/Wikisource"
+			"http://en.wikipedia.org/wiki/Wikisource",
+			"http://en.wikipedia.org/wiki/Bibcode"
 			]
 			
 terms = "#{options[:search]}"
