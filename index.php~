@@ -1,3 +1,5 @@
+<?php include "runCrawler.php"; ?>
+<% puts "hello" %>
 <!DOCTYPE HTML>
 
 <html>
@@ -18,13 +20,13 @@
 </head>
 
 <body>
-		
-<form class="inputForm" onsubmit="return getIdea()" role="form">
+	
+<form class="inputForm" onsubmit="getIdea()" action="" role="form">
 	<img src="./img/ideasaurusLogo.png"/>
 	<div class="input-group">
 		<span class="input-group-btn">
 			<input type="text" id="search" class="form-control">
-			<button class="btn btn-default" action="pythonScript" type="submit" value="Submit">Ideasaur!</button>
+			<button class="btn btn-default"  type="submit" value="Submit">Ideasaur!</button>
 		</span>
 	</div>
 	
@@ -45,7 +47,7 @@
 
 		<div class="btn-group">
 		  <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown">
-		    <span id="breadhLabel" data-bind="label">Select Breadth</span>
+		    <span id="breadthLabel" data-bind="label">Select Breadth</span>
 		    <span class="caret"></span>
 		  </button>
 		  <ul class="dropdown-menu" role="menu" id="breadth" aria-labelledby="breadth">
@@ -74,8 +76,9 @@
    });
 
 	function getIdea(){
-		alert("submitted " + $("input").val() + " "+ $("#depthLabel").text() + " "+ $("#breadthLabel").text());
-}
+		var w = $.get("runCrawler.php", function(data){ alert(data) });
+		//alert("submitted " + $("input").val() + " "+ $("#depthLabel").text() + " "+ $("#breadthLabel").text());
+	}
 </script>
 
 </body>
