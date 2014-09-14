@@ -40,7 +40,7 @@ public:
         pitch_w = static_cast<int>((pitch + (float)M_PI/2.0f)/M_PI * 18);
         yaw_w = static_cast<int>((yaw + (float)M_PI)/(M_PI * 2.0f) * 18);
 
-		POINT cursor;
+/*		POINT cursor;
 		GetCursorPos(&cursor);
 
 #define MOVE_AMOUNT 2
@@ -66,7 +66,7 @@ public:
 		if(running)
 		{
 			SetCursorPos(cursor.x, cursor.y);
-		}
+		}*/
 	}
 
 	void onPose(myo::Myo *myo, uint64_t timestamp, myo::Pose pose)
@@ -80,26 +80,67 @@ public:
 		else if(pose == myo::Pose::waveIn)
 		{
 			myo->vibrate(myo::Myo::vibrationShort);
-			INPUT input = { 0 };
+			/*INPUT input = { 0 };
 			input.type = INPUT_MOUSE;
 			input.mi.dwFlags = MOUSEEVENTF_LEFTDOWN;
 			SendInput(1, &input, sizeof(INPUT));
 			ZeroMemory(&input, sizeof(INPUT));
 			input.type = INPUT_MOUSE;
 			input.mi.dwFlags = MOUSEEVENTF_LEFTUP;
-			SendInput(1, &input, sizeof(INPUT));
+			SendInput(1, &input, sizeof(INPUT));*/
+			
+			INPUT ip;
+			ip.type = INPUT_KEYBOARD;
+			ip.ki.wScan = 0;
+			ip.ki.time = 0;
+			ip.ki.dwExtraInfo = 0;
+
+			//Press the A key
+			ip.ki.wVk = 0x41;
+			ip.ki.dwFlags = 0;
+			SendInput(1, &ip, sizeof(INPUT));
+			//Release it
+			ip.ki.dwFlags = KEYEVENTF_KEYUP;
+			SendInput(1, &ip, sizeof(INPUT));
+			ip.ki.dwFlags = 0;
+			SendInput(1, &ip, sizeof(INPUT));
+			ip.ki.dwFlags = KEYEVENTF_KEYUP;
+			SendInput(1, &ip, sizeof(INPUT));
+			ip.ki.dwFlags = 0;
+			SendInput(1, &ip, sizeof(INPUT));
+			ip.ki.dwFlags = KEYEVENTF_KEYUP;
+			SendInput(1, &ip, sizeof(INPUT));
 		}
 		else if(pose == myo::Pose::waveOut)
 		{
 			myo->vibrate(myo::Myo::vibrationShort);
-			INPUT input = { 0 };
+			/*INPUT input = { 0 };
 			input.type = INPUT_MOUSE;
 			input.mi.dwFlags = MOUSEEVENTF_RIGHTDOWN;
 			SendInput(1, &input, sizeof(INPUT));
 			ZeroMemory(&input, sizeof(INPUT));
 			input.type = INPUT_MOUSE;
 			input.mi.dwFlags = MOUSEEVENTF_RIGHTUP;
-			SendInput(1, &input, sizeof(INPUT));
+			SendInput(1, &input, sizeof(INPUT));*/
+			INPUT ip;
+			ip.type = INPUT_KEYBOARD;
+			ip.ki.wScan = 0;
+			ip.ki.time = 0;
+			ip.ki.dwExtraInfo = 0;
+			ip.ki.wVk = 0x42;
+			ip.ki.dwFlags = 0;
+			SendInput(1, &ip, sizeof(INPUT));
+			//Release it
+			ip.ki.dwFlags = KEYEVENTF_KEYUP;
+			SendInput(1, &ip, sizeof(INPUT));
+			ip.ki.dwFlags = 0;
+			SendInput(1, &ip, sizeof(INPUT));
+			ip.ki.dwFlags = KEYEVENTF_KEYUP;
+			SendInput(1, &ip, sizeof(INPUT));
+			ip.ki.dwFlags = 0;
+			SendInput(1, &ip, sizeof(INPUT));
+			ip.ki.dwFlags = KEYEVENTF_KEYUP;
+			SendInput(1, &ip, sizeof(INPUT));
 		}
 	}
 
